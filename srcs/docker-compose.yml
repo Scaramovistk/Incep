@@ -1,83 +1,59 @@
-version: '3.8'
-
+version: '3.7'
 services:
 
-#	Mariadb
   mariadb:
-    image: mariadb:42
+    env_file:
+      - .env
     container_name: mariadb
-    build: ./requirements/mariadb/
-    expose:
-      - "3306" # Expose port 3306 to other services
+    build: requirements/mariadb
+    image: mariadb:v_final
     volumes:
-      - database:/var/lib/mysql/
+      - db_data:/var/lib/mysql
     networks:
-      - inception # Custom network
-    env_file: .env # Inject variables into the env of the container
-    init: true
-    restart: on-failure
+      - docker_network
+    restart: unless-stopped
 
-#	Wordpress
   wordpress:
-    image: wordpress:42
+    env_file:
+      - .env
     container_name: wordpress
-    build: ./requirements/wordpress/
-    expose:
-      - "9000" # Expose port 9000 to other services
-    volumes:
-      - wordpress_files:/var/www/inception/
-    networks:
-      - inception # Custom network
-    env_file: .env # Inject variables into the env of the container
-    init: true
-    restart: on-failure
-    depends_on:
+    build: requirements/wordpress
+    image: wordpress:v_final
+    depends_on: 
       - mariadb
-
-#	Nginx
-  nginx:
-    image: nginx
-    container_name: nginx
-    build:
-      context: ./requirements/nginx/
-      args:
-        CERT_FOLDER: ${CERT_DIR}
-        CERTIFICATE: ${CERTIFICATE}
-        KEY: ${KEY}
-        COUNTRY: ${COUNTRY}
-        STATE: ${STATE}
-        LOCALITY: ${LOCALITY}
-        ORGANIZATION: ${ORGANIZATION}
-        UNIT: ${UNIT}
-        COMMON_NAME: ${DOMAIN_NAME}
-    ports:
-      - '443:443'
-    volumes:
-      - wordpress_files:/var/www/inception/
     networks:
-      - inception
-    env_file: .env
-    init: true
-    restart: on-failure
-    depends_on:
+      - docker_network
+    volumes:
+      - wordpress_data:/var/www/html/wordpress
+    restart: unless-stopped
+
+  nginx:
+    container_name: nginx
+    build: requirements/nginx
+    image: nginx:v_final
+    depends_on :
       - wordpress
-
-volumes:
-
-  database:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: ~/data/database
-
-  wordpress_files:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: ~/data/wordpress_files
+    networks:
+      - docker_network
+    ports:
+      - "81:81"
+    volumes:
+      - wordpress_data:/var/www/html/wordpress
+    restart: unless-stopped
 
 networks:
-  inception:
-    driver: bridge
+  docker_network:
+
+volumes:
+  db_data: 
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/gscarama/data/mysql
+      o: bind
+  wordpress_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/gscarama/data/wordpress
+      o: bind

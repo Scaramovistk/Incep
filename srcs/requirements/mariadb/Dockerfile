@@ -1,16 +1,19 @@
-# Penultimate stable version of Debian
 FROM debian:bullseye
+
+RUN apt-get update && apt-get -y install mariadb-server mariadb-client systemctl\
+&& rm -rf /var/lib/apt/lists/* \
+&& mkdir -p /var/run/mysqld \
+&& chown -R mysql:mysql /var/run/mysqld \
+&& chmod 777 /var/run/mysqld
 
 EXPOSE 3306
 
-RUN	apt update \
-	&& apt install -y --no-install-recommends --no-install-suggests \
-	mariadb-server \
-	&& rm -rf /var/lib/apt/lists/*
+COPY ./tools/create_db.sh /usr/local/bin/
+COPY ./conf/wordpress.sql /usr/local/bin/
 
-COPY	conf/50-server.cnf /etc/mysql/mariadb.conf.d/
+RUN chmod +x /usr/local/bin/create_db.sh
+RUN chmod +x /usr/local/bin/wordpress.sql
 
-COPY	tools/setup.sh /bin/
-RUN	chmod +x /bin/setup.sh
+ENTRYPOINT ["/usr/local/bin/create_db.sh"]
 
-CMD	["setup.sh", "mysqld_safe"]
+CMD ["mysqld", "--bind-address=0.0.0.0"]
