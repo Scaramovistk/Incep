@@ -1,11 +1,5 @@
 #!/bin/bash
 
-# This variables should be stored in env
-#DB_NAME=database1
-#DB_USER=user1
-#DB_PASSWORD=abc
-#DB_PASS_ROOT=123
-
 service mariadb start
 
 mariadb -v -u root << EOF

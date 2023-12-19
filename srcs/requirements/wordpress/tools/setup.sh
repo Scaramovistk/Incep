@@ -1,6 +1,7 @@
 #!/bin/bash
 
-WP_URL=diogmart.42.fr
+#Is this correct
+WP_URL=gscarama.42.fr
 WP_TITLE=Inception
 WP_ADMIN_USER=root1
 WP_ADMIN_PASSWORD=123
@@ -42,4 +43,3 @@ fi;
 wp --allow-root --path="/var/www/inception/" theme install raft --activate 
 
 exec $@
-

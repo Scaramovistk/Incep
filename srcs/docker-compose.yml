@@ -1,42 +1,37 @@
 version: '3.8'
-
 services:
 
-#	Mariadb
   mariadb:
-    image: mariadb:42
+    image: mariadb_img
     container_name: mariadb
     build: ./requirements/mariadb/
     expose:
-      - "3306" # Expose port 3306 to other services
+      - "3306"
     volumes:
       - database:/var/lib/mysql/
     networks:
-      - inception # Custom network
-    env_file: .env # Inject variables into the env of the container
+      - inception
+    env_file: .env
     init: true
-    restart: on-failure
+    restart: unless-stopped
 
-#	Wordpress
   wordpress:
-    image: wordpress:42
+    image: wordpress_img
     container_name: wordpress
     build: ./requirements/wordpress/
     expose:
-      - "9000" # Expose port 9000 to other services
+      - "9000"
     volumes:
       - wordpress_files:/var/www/inception/
     networks:
-      - inception # Custom network
-    env_file: .env # Inject variables into the env of the container
+      - inception
+    env_file: .env
     init: true
-    restart: on-failure
+    restart: unless-stopped
     depends_on:
       - mariadb
 
-#	Nginx
-  nginx:
-    image: nginx
+    image: nginx_img
     container_name: nginx
     build:
       context: ./requirements/nginx/
@@ -58,7 +53,7 @@ services:
       - inception
     env_file: .env
     init: true
-    restart: on-failure
+    restart: unless-stopped
     depends_on:
       - wordpress
 
@@ -69,14 +64,14 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: ~/data/database
+      device: /home/gscarama/data/mysql
 
   wordpress_files:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: ~/data/wordpress_files
+      device: /home/gscarama/data/wordpress
 
 networks:
   inception:

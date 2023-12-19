@@ -1,7 +1,5 @@
-# Penultimate stable version of Debian
 FROM debian:bullseye
 
-# Default port for PHP-FPM
 EXPOSE	9000
 
 ARG	PHPPATH=/etc/php/7.4/fpm
