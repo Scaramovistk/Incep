@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#Is this correct
+#Is this correct ?
 WP_URL=gscarama.42.fr
 WP_TITLE=Inception
 WP_ADMIN_USER=root1

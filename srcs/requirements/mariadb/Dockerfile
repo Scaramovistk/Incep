@@ -7,9 +7,12 @@ RUN	apt update \
 	mariadb-server \
 	&& rm -rf /var/lib/apt/lists/*
 
-COPY	conf/50-server.cnf /etc/mysql/mariadb.conf.d/
+COPY conf/50-server.cnf /etc/mysql/mariadb.conf.d/
 
-COPY	tools/setup.sh /bin/
-RUN	chmod +x /bin/setup.sh
+RUN chmod 644 /etc/mysql/mariadb.conf.d/50-server.cnf
+RUN chown root:root /etc/mysql/mariadb.conf.d/50-server.cnf
 
-CMD	["setup.sh", "mysqld_safe"]
+COPY tools/setup.sh /bin/
+RUN chmod +x /bin/setup.sh
+
+CMD ["setup.sh", "mysqld"]
