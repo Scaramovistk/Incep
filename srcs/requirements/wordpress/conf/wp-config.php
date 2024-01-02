@@ -48,6 +48,10 @@ define( 'SECURE_AUTH_SALT', getenv('WP_SECURE_AUTH_SALT') );
 define( 'LOGGED_IN_SALT',   getenv('WP_LOGGED_IN_SALT') );
 define( 'NONCE_SALT',       getenv('WP_NONCE_SALT') );
 
+define('WP_DEBUG', true);
+define('WP_DEBUG_LOG', true);
+define('WP_DEBUG_DISPLAY', false);
+
 /**#@-*/
 
 /**

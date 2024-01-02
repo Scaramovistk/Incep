@@ -31,6 +31,7 @@ services:
     depends_on:
       - mariadb
 
+  nginx:
     image: nginx_img
     container_name: nginx
     build:

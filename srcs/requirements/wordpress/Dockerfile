@@ -28,9 +28,9 @@ RUN	wget --no-check-certificate https://raw.githubusercontent.com/wp-cli/builds/
 	
 RUN	mkdir -p /run/php/ && \
 	mkdir -p /var/run/php/ && \
-	mkdir -p /var/www/inception/
+	mkdir -p /var/www/wordpress/
 
-RUN	chown -R www-data:www-data /var/www/inception/
+RUN	chown -R www-data:www-data /var/www/wordpress/
 
 COPY	conf/wp-config.php /tmp/
 

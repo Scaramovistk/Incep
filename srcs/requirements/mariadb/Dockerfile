@@ -1,11 +1,12 @@
-FROM debian:bullseye
+FROM debian:bullseye-slim
 
 EXPOSE 3306
 
-RUN	apt update \
-	&& apt install -y --no-install-recommends --no-install-suggests \
-	mariadb-server \
-	&& rm -rf /var/lib/apt/lists/*
+RUN echo "Acquire::Check-Valid-Until false;" > /etc/apt/apt.conf.d/999no-check-valid-until \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends --no-install-suggests \
+       mariadb-server \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY conf/50-server.cnf /etc/mysql/mariadb.conf.d/
 
