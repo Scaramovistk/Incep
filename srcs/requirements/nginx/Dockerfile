@@ -1,13 +1,14 @@
+# NGINX
+
 FROM debian:bullseye
 
 EXPOSE 443
-
 
 RUN apt update && apt install -y --no-install-recommends --no-install-suggests \
  nginx \
  openssl && \
  rm -rf /var/lib/apt/lists/*
- 
+
 ARG CERT_FOLDER
 ARG CERTIFICATE
 ARG KEY
@@ -17,7 +18,6 @@ ARG LOCALITY
 ARG ORGANIZATION
 ARG UNIT
 ARG DOMAIN_NAME
-
 
 RUN mkdir -p ${CERT_FOLDER} && \
     openssl req -newkey rsa:4096 -x509 -sha256 -nodes \

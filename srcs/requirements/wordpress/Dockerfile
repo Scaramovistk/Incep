@@ -1,3 +1,5 @@
+# WORDPRESS
+
 FROM debian:bullseye
 
 EXPOSE	9000
