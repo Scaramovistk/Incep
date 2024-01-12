@@ -1,18 +1,8 @@
 #!/bin/bash
 
-WP_URL=gscarama.42.fr
-WP_TITLE=Inception
-WP_ADMIN_USER=root1
-WP_ADMIN_PASSWORD=qwerty@12
-WP_ADMIN_EMAIL=root1@123.com
-WP_USER=user1
-WP_PASSWORD=qwerty@12
-WP_EMAIL=user1@123.com
-WP_ROLE=editor
-
 chown -R www-data:www-data /var/www/wordpress/
 
-if [-f "/var/www/wordpress/wp-config.php" ]; then
+if [ "/var/www/wordpress/wp-config.php" ]; then
    mv /tmp/wp-config.php /var/www/wordpress/
 fi
 
